@@ -20,18 +20,15 @@ int bstStrlen(char *s)
   return sc - s;
 }
 
-
-
-void
-bstInsert(BstNode **rootp, char *str) 
+void bstInsert(BstNode **rootp, char *str) 
 {
   if (*rootp == 0) {		/* insert here */
     BstNode *newNode = malloc(sizeof(BstNode));
     for (int i = 0; i < 2; i++) newNode->children[i] = 0;
-    /* copy first zero-terminated  string from inbuf */
+    /* copy first zero-terminated string from inbuf */
     int len = bstStrlen(str), sindex = 0;
     char *scopy = malloc((len + 1) * sizeof(char)), c;
-    do {	
+    do {
       c = *(scopy+sindex) = *(str+sindex);
       sindex++;
     } while (c);
@@ -43,8 +40,7 @@ bstInsert(BstNode **rootp, char *str)
   }
 }
 
-void
-bstPrint(BstNode *root)		/* in order */
+void bstPrint(BstNode *root)		/* in order */
 {
   if (root == 0) return;
   bstPrint(root->children[0]);
@@ -52,8 +48,7 @@ bstPrint(BstNode *root)		/* in order */
   bstPrint(root->children[1]);
 }
 
-void
-bstClear(BstNode **rootp)
+void bstClear(BstNode **rootp)
 {
   if (*rootp == 0) return;
   for (int i = 0; i < 2; i++)
@@ -62,3 +57,4 @@ bstClear(BstNode **rootp)
   free(*rootp);
   *rootp = 0;
 }
+
