@@ -16,13 +16,13 @@
 int tests_run;
 /* end MinUnit */
 
-
 /* Tokenizer test cases */
 static char *test_string_length()
 {
     mu_assert("string_length('happy') == 5", string_length("happy") == 5);
     return 0;
 }
+
 static char *test_is_valid_character()
 {
     mu_assert("is_valid_character(' ') == 0", is_valid_character(' ') == 0);
@@ -115,3 +115,4 @@ static char *all_tests()
 
     return result != 0;
  }
+
