@@ -12,9 +12,6 @@ all: run_tokenizer
 run_tokenizer: $(OBJS) 
 	cc -o run_tokenizer $(CFLAGS) $(OBJS)
 
-run_tests:
-	cc -o run_tests $(CFLAGS) $(OBJS) tester.o
-
 # all object files built from c files that include
 $(OBJS): tokenizer.h history.h
 
@@ -24,3 +21,4 @@ clean:
 
 run:run_tokenizer
 	./run_tokenizer
+
