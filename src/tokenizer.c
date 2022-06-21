@@ -50,12 +50,12 @@ int count_words(char *str)
 /* Returns a freshly allocated new zero-terminated string containing <len> chars from <inStr> */
 char *copy_str(char *inStr, short len)
 {
-  char *new_str = malloc(sizeof(char) * len); //Allocate enough space to store len characters
+  char *new_str = malloc(sizeof(char) * (len+1)); //Allocate enough space to store len characters and null
   if (new_str == NULL) return NULL; //return null if there was not enough space in malloc
   char *temp = new_str;   //Create a pointer to new_str
   while (len-- > 0)       //While we have more character to copy
     (*temp++ = *inStr++); //Copy next character and increase temp and inStr by one
-  *(--temp) = '\0';       //Change the last character to a '\0'
+  *temp = '\0';           //Set last character to '\0'
   return new_str;         //Return the copy word
 }
 
@@ -72,7 +72,7 @@ char **tokenize(char *str)
   for (int i = 0; i < n_words; i++) {
     start_word = word_start(str);     //Get beginning of word
     end_word = word_terminator(str);  //Get end of word
-    arr[i] = copy_str(start_word,end_word-start_word+1);  //Copy word
+    arr[i] = copy_str(start_word,end_word-start_word);  //Copy word
     str = end_word + 1; //Start after the blank of the found word
   }
   arr[n_words] = '\0';  //Set last item in arr to '\0'
@@ -82,8 +82,9 @@ char **tokenize(char *str)
 /* Prints all tokens. */
 void print_tokens(char **tokens)
 {
-  for (char **p = tokens; *p; p++)  //Iterate every token in tokens
-    printf("%s ",*p);   //Print string being pointed by p
+  int i = 0;
+  for (char **p = tokens; *p; p++)    //Iterate every token in tokens
+    printf("Token %d: %s in address %x\n",++i,*p, p);  //Print string being pointed by p
   printf("\n");
   return;
 }
@@ -91,8 +92,12 @@ void print_tokens(char **tokens)
 /* Frees all tokens and the vector containing them. */
 void free_tokens(char **tokens)
 {
-  for (char **p = tokens; *p; p++)  //Iterate every token in tokens
+  printf("Inside of free_tokens function\n");
+  for (char **p = tokens; *p; p++) {  //Iterate every token in tokens
+    printf("%s in %x\n", *p, p);
     free(p);    //Free the space allocated for the string in p
+  }
+  free(tokens);
   return;
 }
 

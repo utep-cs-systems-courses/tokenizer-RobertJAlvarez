@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "tokenizer.h"
-#include "history.h"
 
 int main(int argc, char **argv)
 {
@@ -9,7 +8,7 @@ int main(int argc, char **argv)
     printf("%s ",*p);
   printf("\n");
 
-  char *str = "A b C";
+  char *str = "A b C?";
 
   //count_words test
   int n_words = count_words(str);
@@ -21,6 +20,7 @@ int main(int argc, char **argv)
 
   //Tokenize
   char **arr = tokenize(str);
+  printf("Tokenize function finished.\n");
   print_tokens(arr);
   free_tokens(arr);
 
