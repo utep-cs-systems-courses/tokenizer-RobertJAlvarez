@@ -1,11 +1,10 @@
 # for convenience, define variable $(OBJS) to list of object files
 OBJS= history.o tokenizer.o uimain.o
 
-# make has a "default rule" specifying how to build an "object" file (.o) from a C source file (.c)
-#            this rule includes $(CFLAGS) as one of cc's parameters 
-CFLAGS=-g -O3 # -g for debug, -O3 for optimization
+# compiler flags. -g for debug, -O3 for optimization
+CFLAGS=-g -O3
 
-# first target is built by default. Usually named "all"
+# first target is built by default
 all: run_tokenizer
 
 # run_tokenizer (target) depends on all object files (prerequisites)
