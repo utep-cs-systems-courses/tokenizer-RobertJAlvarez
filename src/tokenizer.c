@@ -47,15 +47,17 @@ int count_words(char *str)
   return n_words; //Return number of words
 }
 
+//Return length from beginning to end of word
 int word_len(char *str)
 {
   return word_terminator(str) - word_start(str);
 }
 
+//Return length from beginning to end of string (initial white spaces count)
 int str_len(char *str)
 {
   char *temp = str;
-  while (*(temp = word_terminator(temp)) != '\0');
+  while (*temp++ != '\0');  //Read everything in str until the '\0'
   return temp - str;
 }
 
@@ -66,7 +68,7 @@ char *copy_str(char *inStr, short len)
   if (new_str == NULL) return NULL; //return null if there was not enough space in malloc
   char *temp = new_str;   //Create a pointer to new_str
   while (len--)       //While we have more character to copy
-    (*temp++ = *inStr++); //Copy next character and increase temp and inStr by one
+    *temp++ = *inStr++; //Copy next character and increase temp and inStr by one
   *temp = '\0';           //Set last character to '\0'
   return new_str;         //Return the copy word
 }
@@ -91,8 +93,8 @@ char **tokenize(char *str)
 /* Prints all tokens. */
 void print_tokens(char **tokens)
 {
-  for (int i = 0; *tokens; tokens++)    //Iterate every token in tokens
-    printf("Token %d: %s in address %x\n",++i,*tokens, tokens);  //Print string being pointed by p
+  for (int i = 0; *tokens; tokens++)      //Iterate every token in tokens
+    printf("Token %d: %s\n",++i,*tokens); //Print string being pointed by p
   printf("\n");
   return;
 }
@@ -101,8 +103,8 @@ void print_tokens(char **tokens)
 void free_tokens(char **tokens)
 {
   for (char **p = tokens; *p; p++) //Iterate every token in tokens
-    free(*p);    //Free the space allocated for the string in p
-  free(tokens);
+    free(*p);   //Free the space allocated for the string in p
+  free(tokens); //Free the space to store the pointer to the string
   return;
 }
 

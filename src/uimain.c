@@ -21,8 +21,11 @@ int main(int argc, char **argv)
 
   //Tokenize
   char **arr = tokenize(str);
+  printf("\n");
   print_tokens(arr);
+  printf("Freeing tokens space.\n");
   free_tokens(arr);
+  printf("All space clean\n");
 
   //History
   //?
