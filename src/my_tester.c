@@ -26,11 +26,13 @@ int main(int argc, char **argv)
 
   //History
   List *LL = init_history();
-  add_history(LL, *arr);
-  add_history(LL, *(arr+1));
-  printf("History of 1: %s\n",get_history(LL,1));
+  for (char **p = arr; *p; p++)
+    add_history(LL, *p);
   printf("Printing history:\n");
   print_history(LL);
+
+  printf("\nHistory of 1: %s\n",get_history(LL,1));
+  printf("We have %d items in history.\n",LL->n_items);
 
   printf("\nFreeing tokens space.\n");
   free_tokens(arr);
@@ -38,7 +40,7 @@ int main(int argc, char **argv)
 
   printf("\nFreeing history.\n");
   free_history(LL);
-  printf("History space free:)\n");
+  printf("History has been free\n");
 
   return 0;
 }

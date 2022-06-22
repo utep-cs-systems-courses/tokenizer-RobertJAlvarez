@@ -66,11 +66,10 @@ char *copy_str(char *inStr, short len)
 {
   char *new_str = malloc(sizeof(char) * (len+1)); //Allocate enough space to store len characters and null
   if (new_str == NULL) return NULL; //return null if there was not enough space in malloc
-  char *temp = new_str;   //Create a pointer to new_str
-  while (len--)       //While we have more character to copy
-    *temp++ = *inStr++; //Copy next character and increase temp and inStr by one
-  *temp = '\0';           //Set last character to '\0'
-  return new_str;         //Return the copy word
+  char *temp = new_str; //Create a pointer to new_str
+  while (len-- && (*temp++ = *inStr++) != '\0');  //While we have more character to copy
+  *temp = '\0';         //Set last character to '\0'
+  return new_str;       //Return the copy word
 }
 
 /* Returns a freshly allocated zero-terminated vector of freshly allocated 
