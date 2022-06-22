@@ -52,7 +52,7 @@ void print_history(List *list)
 {
   Item *curr = list->root;  //Save root in curr
   while (curr != NULL) {    //While current is not NULL
-    printf("%d: %s",curr->id, curr->str); //Print current id followed by current string
+    printf("%d: %s\n",curr->id, curr->str); //Print current id followed by current string
     curr = curr->next;      //Update current to the Item
   }
   return;
@@ -70,6 +70,7 @@ void free_history(List *list)
     curr = next;        //Set current Item to next item
   }
   free(curr); //Free the spaces used for the Item
+  free(list);
   return;
 }
 
