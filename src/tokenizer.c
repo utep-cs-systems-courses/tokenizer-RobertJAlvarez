@@ -20,7 +20,6 @@ int non_space_char(char c)
   zero-terminated str. Return a zero pointer if str does not contain any words. */
 char *word_start(char *str)
 {
-  if (*str == '\0') return str;
   while (*str != '\0' && space_char(*str))
     str++;    //Add one to str until you are not on a space character
   return str;
@@ -29,6 +28,7 @@ char *word_start(char *str)
 /* Returns a pointer terminator char following *word */
 char *word_terminator(char *word)
 {
+  word = word_start(word);
   while (*word != '\0' && non_space_char(*word))
     word++;   //Go to next char in word until word is a space char
   return word;
@@ -39,12 +39,24 @@ int count_words(char *str)
 {
   int n_words = 0;
   while (*str != '\0') {
-    str = word_start(str);  //Get to the beginning of the next word
+    str = word_start(str); //Get to the end of the word
     if (*str != '\0') //If the next word start with a '\0' is because there are no more words
       n_words++;      //Add one to the counter
     str = word_terminator(str); //Get to the end of the word
   }
   return n_words; //Return number of words
+}
+
+int word_len(char *str)
+{
+  return word_terminator(str) - word_start(str);
+}
+
+int str_len(char *str)
+{
+  char *temp = str;
+  while (*(temp = word_terminator(temp)) != '\0');
+  return temp - str;
 }
 
 /* Returns a freshly allocated new zero-terminated string containing <len> chars from <inStr> */
@@ -67,14 +79,16 @@ char **tokenize(char *str)
 {
   int n_words = count_words(str); //Calculate number of words in str
   char **arr = malloc(sizeof(char) * (n_words+1));  //Allocate enough space to store (n_words+1) pointers to characters
-  char *start_word, *end_word;  //Make pointer for the beginning and end of word
 
   for (int i = 0; i < n_words; i++) {
-    start_word = word_start(str);     //Get beginning of word
-    end_word = word_terminator(str);  //Get end of word
-    arr[i] = copy_str(start_word,end_word-start_word);  //Copy word
-    str = end_word + 1; //Start after the blank of the found word
+    str = word_start(str);     //Get beginning of word
+    arr[i] = copy_str(str,word_len(str));  //Copy word
+    str = word_terminator(str) + 1; //Start after the blank of the found word
   }
+printf("Pointer at %x is pointing to:\n",arr);
+for (int j = 0; j < 3; j++)
+  printf("arr[0][%d] = %c\n", j, arr[0][j]);
+printf("arr[0] = %s at address %x\n", arr, arr);
   arr[n_words] = '\0';  //Set last item in arr to '\0'
   return arr; //Return array of pointer to arrays of characters
 }
