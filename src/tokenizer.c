@@ -78,17 +78,12 @@ char *copy_str(char *inStr, short len)
 char **tokenize(char *str)
 {
   int n_words = count_words(str); //Calculate number of words in str
-  char **arr = malloc(sizeof(char) * (n_words+1));  //Allocate enough space to store (n_words+1) pointers to characters
-
+  char **arr = malloc(sizeof(char *) * (n_words+1));  //Allocate enough space to store (n_words+1) pointers to characters
   for (int i = 0; i < n_words; i++) {
     str = word_start(str);     //Get beginning of word
     arr[i] = copy_str(str,word_len(str));  //Copy word
     str = word_terminator(str) + 1; //Start after the blank of the found word
   }
-printf("Pointer at %x is pointing to:\n",arr);
-for (int j = 0; j < 3; j++)
-  printf("arr[0][%d] = %c\n", j, arr[0][j]);
-printf("arr[0] = %s at address %x\n", arr, arr);
   arr[n_words] = '\0';  //Set last item in arr to '\0'
   return arr; //Return array of pointer to arrays of characters
 }
