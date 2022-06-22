@@ -8,6 +8,7 @@ typedef struct s_Item {
 } Item;
 
 typedef struct s_List {
+  int n_items;
   struct s_Item *root;
 } List;
 

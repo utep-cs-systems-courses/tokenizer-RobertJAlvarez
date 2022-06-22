@@ -16,23 +16,24 @@ List *init_history()
    char* str - the string to store */
 void add_history(List *list, char *str)
 {
-  if (list->root == NULL) {   //If root is NULL
-    Item *it = malloc(sizeof(Item));  //Get a pointer pointing to enough memory to hold an Item
-    it->str = str;    //Set item string
-    it->id = 1;       //Set item id
-    it->next = NULL;  //Set next item to NULL
-    list->root = it;  //Update the root of list to the item just created
-    return;
-  }
-  //If root is not NULL
+  Item *new = malloc(sizeof(Item));  //Get a pointer pointing to enough memory to hold an Item
   Item *temp = list->root;    //Save root in temp
-  Item *new = malloc(sizeof(Item)); //Get enough space to hold an Item
-  while(temp->next)     //While we have another Item
-    temp = temp->next;  //Set temp to the next item
-  new->id = temp->id+1; //Take if of new item to the previous id+1
-  new->str = str;       //Set str of new item
-  new->next = NULL;     //Set the next Item after the new item to NULL
-  temp->next = new;     //Append the new item to the list
+
+  if (temp == NULL) {   //If root is NULL
+    list->n_items = 0;
+    new->id = 1;
+    new->str = str;
+    new->next = NULL;
+    list->root = new;
+  } else {  //If root is not NULL
+    while(temp->next)     //While we have another Item
+      temp = temp->next;  //Set temp to the next item
+    new->id = temp->id+1;
+    new->str = str;
+    new->next = NULL;
+    temp->next = new; //Append the new item to the list
+  }
+  list->n_items++;
   return;
 }
 
@@ -61,15 +62,21 @@ void print_history(List *list)
 /*Free the history list and the strings it references. */
 void free_history(List *list)
 {
-  Item *curr = list->root;  //Save root in curr
-  Item *next;               //Dummy variable to hold the next Item
-  while (curr->next != NULL) {  //While we have another Item
+  if (list->root == NULL) {
+    free(list);
+    return;
+  }
+  Item *curr = list->root;
+  Item *next;               //Dummy variable to hold Item after curr
+  while (curr->next != NULL) {
     next = curr->next;  //Save next item in next
     free(curr->str);    //Free the space used for the string
     free(curr);         //Free the space used for the Item
     curr = next;        //Set current Item to next item
   }
-  free(curr); //Free the spaces used for the Item
+  //Free the space used for the last Item
+  free(curr->str);
+  free(curr);
   free(list);
   return;
 }
