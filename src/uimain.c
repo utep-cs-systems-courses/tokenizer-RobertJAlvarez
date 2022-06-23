@@ -3,8 +3,18 @@
 #include "tokenizer.h"
 #include "history.h"
 
+void print_menu();
 int str_cmp(char *str1, char *str2);
-int is_num(char c);
+int get_num(char *str);
+
+void print_menu()
+{
+  printf("Enter a sentence that you would like to separate by spaces (Don't start a sentence with \"!\"):\n");
+  printf("Enter \"history\" if you want to display all the previous sentences.\n");
+  printf("Enter \"!#\" to print sentence #\n");
+  printf("Enter \"exit\" to terminate the program\n");
+  return;
+}
 
 //Compare two strings, return > 0 if str1 > str2, < 0 if str1 < str 2, 0 if str1 == str2
 int str_cmp(char *str1, char *str2)
@@ -15,67 +25,50 @@ int str_cmp(char *str1, char *str2)
   return *str1 - *str2; //Return > 0 if str1 > str2, return < 0 if str1 < str 2
 }
 
-//Return 1 if c is between 0 and 9 in the ASCII table
-int is_num(char c)
-{
-  return (c <= 0x30 && c >= 0x39) ? 1 : 0;
-}
-
 int get_num(char *str)
 {
-  // Use this somewhere: sscanf(str+1,"%d", &num);
-  return 1;
+  int num;
+  sscanf(str,"%d", &num);
+  return num;
 }
 
 int main(int argc, char **argv)
 {
-  char **tokens;
   char *str;
-  size_t bufsize = 100;
+  size_t bufsize = 100; //Limit input line size
   size_t n_chars;
   List *LL = init_history();
 
   str = (char *) malloc(bufsize * sizeof(char));
   if (str == NULL) {
     printf("Unable to allocate buffer");
-    return 1;
+    exit(1);
   }
 
   while (1) {
-    printf("Enter a sentence that you would like to separate by spaces (Don't start a sentence with \"!\"):\n");
-    printf("Enter \"history\" if you want to display all the previous sentences.\n");
-    printf("Enter \"!#\" to print sentence #\n");
-    printf("Enter \"exit\" to terminate the program\n");
-    n_chars = getline(&str, &bufsize, stdin);
+    print_menu();
+    n_chars = getline(&str, &bufsize, stdin); //Read line in str and save number of characters
     str[n_chars-1] = '\0';  //Change the '\n' for a '\0'
-    if (str_cmp(str,"exit") == 0) {
+    if (str_cmp(str,"exit") == 0) { //Free space and exit the program
       free_history(LL);
       break;
     }
-    else if (str_cmp(str,"history") == 0)
+    else if (str_cmp(str,"history") == 0) //Print history
       print_history(LL);
-    else if (*str != '!') {
-      tokens = tokenize(str);
+    else if (*str == '!') {     //Print the specify history if match exist
+      int num = get_num(str+1);
+      if (num > LL->n_items || num < 1)  //Make sure to not look/print an invalid history item
+        printf("Item number %d doesn't exist\n",num);
+      else
+        printf("Sentence %d: %s\n", num, get_history(LL, num));
+    }
+    else {                    //Break input into tokens, print them individually and save string
+      char **tokens = tokenize(str);
       print_tokens(tokens);
       free_tokens(tokens);
-printf("String sent to be added to history: \"%s\"\n",str);
-      add_history(LL, str);
-printf("Current history:\n");
-print_history(LL);
-    }
-    else if (*str == '!') { //Print the specify history
-      int num = get_num(str+1);
-      if (num <= 0)
-        printf("Only enter a number following \"!\"\n");
-      else {
-        if (num > LL->n_items)
-          printf("Item number %c doesn't exist\n",*(str+1));
-        else
-          printf("Sentence %d: %s\n", num, get_history(LL, num));
-      }
+      add_history(LL, copy_str(str,n_chars-1));
     }
   }
-
   return 0;
 }
 

@@ -6,9 +6,9 @@
 /* Initialize the linked list to keep the history. */
 List *init_history()
 {
-  List *p = malloc(sizeof(List)); //Get a pointer pointing to enough memory to hold a List
-  p->root = NULL; //Root is empty
-  return p;     //Return address of List
+  List *p = malloc(sizeof(List));
+  p->root = NULL; //list is empty
+  return p;
 }
 
 /* Add a history item to the end of the list.
@@ -16,24 +16,21 @@ List *init_history()
    char* str - the string to store */
 void add_history(List *list, char *str)
 {
-  Item *new = malloc(sizeof(Item));  //Get a pointer pointing to enough memory to hold an Item
-  Item *temp = list->root;    //Save root in temp
+  Item *new = malloc(sizeof(Item));
+  Item *temp = list->root;
 
-  if (temp == NULL) {   //If root is NULL
+  if (temp == NULL) {   //If this is the first item in list
     list->n_items = 0;
-    new->id = 1;
-    new->str = str;
-    new->next = NULL;
     list->root = new;
-  } else {  //If root is not NULL
-    while(temp->next)     //While we have another Item
-      temp = temp->next;  //Set temp to the next item
-    new->id = temp->id+1;
-    new->str = str;
-    new->next = NULL;
-    temp->next = new; //Append the new item to the list
+  } else {
+    //Get last Item in list
+    while(temp->next)
+      temp = temp->next;
+    temp->next = new; //Append new item to list
   }
-  list->n_items++;
+  new->id = ++list->n_items;
+  new->str = str;
+  new->next = NULL;
   return;
 }
 
@@ -42,19 +39,19 @@ void add_history(List *list, char *str)
    int id - the id of the Item to find */
 char *get_history(List *list, int id)
 {
-  Item *temp = list->root;  //Save root in temp
-  while(temp->id != id)     //While if of temp doesn't match the passed id
-    temp = temp->next;      //Update temp to the next Item
-  return temp->str;         //Return the string of the Item that match the id
+  Item *temp = list->root;
+  while(temp->id != id)
+    temp = temp->next;
+  return temp->str; //return the string of the Item that match the id
 }
 
 /*Print the entire contents of the list. */
 void print_history(List *list)
 {
-  Item *curr = list->root;  //Save root in curr
-  while (curr != NULL) {    //While current is not NULL
-    printf("%d: %s\n",curr->id, curr->str); //Print current id followed by current string
-    curr = curr->next;      //Update current to the Item
+  Item *curr = list->root;
+  while (curr != NULL) {
+    printf("%d: %s\n",curr->id, curr->str);
+    curr = curr->next;
   }
   return;
 }
@@ -67,12 +64,12 @@ void free_history(List *list)
     return;
   }
   Item *curr = list->root;
-  Item *next;               //Dummy variable to hold Item after curr
+  Item *next;           //Dummy variable to hold Item after curr
   while (curr->next != NULL) {
-    next = curr->next;  //Save next item in next
-    free(curr->str);    //Free the space used for the string
-    free(curr);         //Free the space used for the Item
-    curr = next;        //Set current Item to next item
+    next = curr->next;  //Save next item so we can free curr space without losing next item
+    free(curr->str);
+    free(curr);
+    curr = next;
   }
   //Free the space used for the last Item
   free(curr->str);
