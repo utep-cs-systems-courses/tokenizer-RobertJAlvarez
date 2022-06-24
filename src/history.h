@@ -12,6 +12,9 @@ typedef struct s_List {
   struct s_Item *root;
 } List;
 
+//Compare two strings, return > 0 if str1 > str2, < 0 if str1 < str 2, 0 if str1 == str2
+int str_cmp(char *str1, char *str2);
+
 /* Initialize the linked list to keep the history. */
 List *init_history();
 

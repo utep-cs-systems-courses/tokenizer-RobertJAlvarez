@@ -47,9 +47,6 @@ void print_tokens(char **tokens);
 /* Frees all tokens and the vector containing themx. */
 void free_tokens(char **tokens);
 
-//Compare two strings, return > 0 if str1 > str2, < 0 if str1 < str 2, 0 if str1 == str2
-int str_cmp(char *str1, char *str2);
-
 //Change the int number pointed by *str to an int variable and return it
 int get_num(char *str);
 
