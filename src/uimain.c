@@ -6,6 +6,7 @@
 void print_menu();
 int str_cmp(char *str1, char *str2);
 int get_num(char *str);
+char *trim_str(char *str);
 
 void print_menu()
 {
@@ -25,6 +26,7 @@ int str_cmp(char *str1, char *str2)
   return *str1 - *str2; //Return > 0 if str1 > str2, return < 0 if str1 < str 2
 }
 
+//Change the int number pointed by *str to an int variable and return it
 int get_num(char *str)
 {
   int num;
@@ -32,29 +34,40 @@ int get_num(char *str)
   return num;
 }
 
+//Delete white spaces at the beginning of str and return the pointer to the first char != ' '
+char *trim_str(char *str)
+{
+  while (*str != '\0' && *str == ' ')
+    str++;
+  return str;
+}
+
 int main(int argc, char **argv)
 {
-  char *str;
+  char *str, *inp_str;
   size_t bufsize = 100; //Limit input line size
   size_t n_chars;
   List *LL = init_history();
 
-  str = (char *) malloc(bufsize * sizeof(char));
-  if (str == NULL) {
+  inp_str = (char *) malloc(bufsize * sizeof(char));
+  if (inp_str == NULL) {
     printf("Unable to allocate buffer");
     exit(1);
   }
 
   while (1) {
     print_menu();
-    n_chars = getline(&str, &bufsize, stdin); //Read line in str and save number of characters
-    str[n_chars-1] = '\0';  //Change the '\n' for a '\0'
+    n_chars = getline(&inp_str, &bufsize, stdin); //Read line and save number of characters
+    inp_str[n_chars-1] = '\0';  //Change the '\n' for a '\0'
+    str = trim_str(inp_str);
     if (str_cmp(str,"exit") == 0) { //Free space and exit the program
       free_history(LL);
       break;
     }
-    else if (str_cmp(str,"history") == 0) //Print history
+    else if (str_cmp(str,"history") == 0) { //Print history
+      add_history(LL, copy_str(str,n_chars-1));
       print_history(LL);
+    }
     else if (*str == '!') {     //Print the specify history if match exist
       int num = get_num(str+1);
       if (num > LL->n_items || num < 1)  //Make sure to not look/print an invalid history item
@@ -62,7 +75,7 @@ int main(int argc, char **argv)
       else
         printf("Sentence %d: %s\n", num, get_history(LL, num));
     }
-    else {                    //Break input into tokens, print them individually and save string
+    else if (*str != '\0') {  //Break input into tokens, print them and save string
       char **tokens = tokenize(str);
       print_tokens(tokens);
       free_tokens(tokens);
