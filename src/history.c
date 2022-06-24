@@ -26,6 +26,8 @@ void add_history(List *list, char *str)
     //Get last Item in list
     while(temp->next)
       temp = temp->next;
+    if (str_cmp(temp->str, str) == 0) //Don't add line to history if identical to previous input
+      return;
     temp->next = new; //Append new item to list
   }
   new->id = ++list->n_items;
