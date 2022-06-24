@@ -17,7 +17,7 @@ void print_menu()
   return;
 }
 
-int main(int argc, char **argv)
+int main()
 {
   char *str, *inp_str;
   size_t bufsize = 100; //Limit input line size
