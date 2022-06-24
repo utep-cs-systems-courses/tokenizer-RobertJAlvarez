@@ -2,14 +2,17 @@
 OBJS= history.o tokenizer.o uimain.o
 
 # compiler flags. -g for debug, -O3 for optimization
-CFLAGS=-g -O3
+CFLAGS = -O3 -g -g3 -fbounds-check  #-O3 for optimization \ -g* -f* for debugging
+WFLAGS = -Wall -Wextra -Werror=format-security -Werror=implicit-function-declaration \
+         -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wwrite-strings \
+         -Waggregate-return -Wcast-qual -Wunreachable-code #-W* for warnings
 
 # first target is built by default
 all: run_tokenizer
 
 # run_tokenizer (target) depends on all object files (prerequisites)
 run_tokenizer: $(OBJS) 
-	cc -o run_tokenizer $(CFLAGS) $(OBJS)
+	cc -o run_tokenizer $(CFLAGS) $(WFLAGS) $(OBJS)
 
 # all object files built from c files that include
 $(OBJS): tokenizer.h history.h
