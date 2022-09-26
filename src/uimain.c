@@ -3,12 +3,7 @@
 #include "tokenizer.h"
 #include "history.h"
 
-void print_menu();
-int str_cmp(char *str1, char *str2);
-int get_num(char *str);
-char *trim_str(char *str);
-
-void print_menu()
+void print_menu(void)
 {
   printf("Enter a sentence that you would like to separate by spaces (Don't start a sentence with \"!\"):\n");
   printf("Enter \"history\" if you want to display all the previous sentences.\n");

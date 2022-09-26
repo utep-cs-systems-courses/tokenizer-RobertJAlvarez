@@ -16,7 +16,7 @@ typedef struct s_List {
 int str_cmp(char *str1, char *str2);
 
 /* Initialize the linked list to keep the history. */
-List *init_history();
+List *init_history(void);
 
 /* Add a history item to the end of the list.
    List* list - the linked list
